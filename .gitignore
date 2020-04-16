@@ -1,0 +1,16 @@
+# Ignore everything
+*.*
+
+# Allow these files
+!.gitattributes
+!.gitignore
+!readme.md
+!.gitkeep
+
+# Allow these types
+!*.py
+!*.png
+
+# Forget
+nocommit*
+venv/*
