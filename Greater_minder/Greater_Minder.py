@@ -1,3 +1,4 @@
+"""Greater-Minder - The ultimate fun breaker"""
 import sys
 import random
 
@@ -5,40 +6,14 @@ import random
 def main():
     print('### Greater-Minder - The ultimate fun breaker! ###')
 
-    begin = None
-    while begin is None:
-        begin = input('Let\'s play the game [y/n] ? : ')
-
-        if begin.lower() == 'n':
-            print('So why launch the game ?')
-            sys.exit()
-        elif begin.lower() in ('y', ''):
-            play = True
-        else:
-            begin = None
-            print('Please enter "y" for yes or "n" for no.')
-
+    play = begin_game('Let\'s play the game [y/n] ? : ', 'begin')
+    
     # Main loop
     while play:
         # Set difficulty level
-        level = input_int('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ')
+        run, upper = set_difficulty()
 
-        if level == 1:
-            run = 15
-            upper = 200
-        elif level == 2:
-            run = 10
-            upper = 150
-        else:
-            run = 5
-            upper = 100
-
-        lev = f'You got {run} turn to find a number between 0 and {upper}'
-
-        print('\n' + '_' * len(lev))
-        print(lev + '\n' + '_' * len(lev))
-
-        # Variable declaration
+        # Initial declaration
         turn = 0
         lower = 0
         win = False
@@ -64,18 +39,55 @@ def main():
         else:
             print(f'You loose ! \nThe number to find was {goal}.\n')
 
-        again = None
-        while again is None:
-            again = input('Another game [y/n] ? : ')
+        play = begin_game('Another game [y/n] ? : ', 'again')
 
-            if again.lower() == 'n':
+
+
+def begin_game(phrase, setup):
+    """Ask the user if he REALLY want to play at this lame game..."""
+    begin = None
+    while begin is None:
+        begin = input(phrase)
+
+        if begin.lower() == 'n':
+            if setup == 'begin':
+                print('So why launch the game ?')
+            elif setup == 'again':
                 print('\nSo sad ! See you next time !!')
-                sys.exit()
-            elif again.lower() in ('y', ''):
-                play = True
             else:
-                again = None
-                print('Please enter "y" for yes or "n" for no.')
+                raise ValueError
+
+            sys.exit()
+
+        elif begin.lower() in ('y', ''):
+            play = True
+        else:
+            begin = None
+            print('Please enter "y" for yes or "n" for no.')
+    
+    return play
+
+
+def set_difficulty():
+    """Ask the user for a difficulty level"""
+    level = input_int('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ')
+
+    if level == 1:
+        run = 15
+        upper = 200
+    elif level == 2:
+        run = 10
+        upper = 150
+    else:
+        run = 5
+        upper = 100
+
+    lev = f'You got {run} turn to find a number between 0 and {upper}'
+
+    print('\n' + '_' * len(lev))
+    print(lev + '\n' + '_' * len(lev))
+    
+    return run, upper
 
 
 def input_int(setup, phrase, upper=None, lower=None):
