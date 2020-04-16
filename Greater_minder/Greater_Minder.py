@@ -1,13 +1,14 @@
-"""Greater-Minder - The ultimate fun breaker"""
+"""Greater_minder - The ultimate fun breaker"""
 import sys
 import random
 
 
 def main():
+    """Main function of the game"""
     print('### Greater-Minder - The ultimate fun breaker! ###')
 
     play = begin_game('Let\'s play the game [y/n] ? : ', 'begin')
-    
+
     # Main loop
     while play:
         # Set difficulty level
@@ -21,7 +22,12 @@ def main():
 
         # Game loop
         while turn < run and not win:
-            choice = input_int('choice', f'Guess the number between {lower} and {upper} ? : ', upper, lower)
+            choice = input_int(
+                'choice',
+                f'Guess the number between {lower} and {upper} ? : ',
+                upper,
+                lower
+            )
 
             turn += 1
 
@@ -40,7 +46,6 @@ def main():
             print(f'You loose ! \nThe number to find was {goal}.\n')
 
         play = begin_game('Another game [y/n] ? : ', 'again')
-
 
 
 def begin_game(phrase, setup):
@@ -64,7 +69,7 @@ def begin_game(phrase, setup):
         else:
             begin = None
             print('Please enter "y" for yes or "n" for no.')
-    
+
     return play
 
 
@@ -86,7 +91,7 @@ def set_difficulty():
 
     print('\n' + '_' * len(lev))
     print(lev + '\n' + '_' * len(lev))
-    
+
     return run, upper
 
 
@@ -103,9 +108,7 @@ def input_int(setup, phrase, upper=None, lower=None):
         while level is None:
             try:
                 level = int(input(phrase))
-                if level in (1, 2, 3):
-                    return level
-                else:
+                if level not in (1, 2, 3):
                     level = None
                     raise ValueError
             except ValueError:
@@ -115,13 +118,13 @@ def input_int(setup, phrase, upper=None, lower=None):
         while choice is None:
             try:
                 choice = int(input(phrase))
-                if lower <= choice <= upper:
-                    return choice
-                else:
+                if not lower <= choice <= upper:
                     choice = None
                     raise ValueError
             except ValueError:
                 print(f'You must enter a number between 0 and {upper}')
+
+    return level if setup == 'level' else choice
 
 
 if __name__ == '__main__':
