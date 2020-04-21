@@ -8,7 +8,7 @@ COLOR = ['green', 'yellow', 'red', 'blue', 'black']
 def main():
     """The main function of the game"""
     print('### The Master of the Mind ! ###')
-    print('# Can you read into the machine\'s brain ?')
+    print('# Can you read into the machine\'s brain ?\n')
     
     play = begin_game('Wanna try to master the Mind ? [y/n] : ', 'begin')
 
@@ -25,6 +25,8 @@ def main():
             print('-' * len(f'Attempt {turn}/{RUN}'))
             print(f'Attempt {turn}/{RUN}')
             print('-' * len(f'Attempt {turn}/{RUN}'))
+
+            choice = input_setup('choice', 'What\'s your guess for color : ', COLOR)
         
         # Exit or restart
         play = begin_game('Another game [y/n] ? : ', 'again')
@@ -44,7 +46,7 @@ def begin_game(phrase, setup):
             elif setup == 'again':
                 print('\nSo sad ! See you next time !!')
             else:
-                raise ValueError('You should not be here ...')
+                raise ValueError
 
             sys.exit()
 
@@ -59,20 +61,20 @@ def begin_game(phrase, setup):
 
 def set_difficulty(color):
     """Ask the user for a difficulty level"""
-    level = input_int('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ') + 3
+    level = input_setup('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ') + 3
 
     sol = []
 
     for x in range(level):
-        sol.append(color[randint(0, len(color))])
+        sol.append(color[randint(0, len(color) - 1)])
 
     print(f'You have {RUN} turn to find {len(sol)} colors')
-    print('Let\s begin ! \n')
+    print('Let\'s begin ! \n')
 
     return sol
 
 
-def input_int(setup, phrase, upper=None, lower=None):  #TODO: MasterMind it
+def input_setup(setup, phrase, color=None):  #TODO: MasterMind it
     """Ask the user the phrase to declare the level or the choice.
 
     Input:
@@ -94,12 +96,13 @@ def input_int(setup, phrase, upper=None, lower=None):  #TODO: MasterMind it
         choice = None
         while choice is None:
             try:
-                choice = int(input(phrase))
-                if not lower <= choice <= upper:
+                choice = input(phrase)
+                check = choice in color
+                if not check:
                     choice = None
                     raise ValueError
             except ValueError:
-                print(f'You must enter a number between 0 and {upper}')
+                print(f'You must enter a color in {color}')
 
     return level if setup == 'level' else choice
 
