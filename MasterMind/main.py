@@ -26,7 +26,23 @@ def main():
             print(f'Attempt {turn}/{RUN}')
             print('-' * len(f'Attempt {turn}/{RUN}'))
 
-            choice = input_setup('choice', 'What\'s your guess for color : ', COLOR)
+            answer = ask_answer(soluce, COLOR)
+            
+            print(answer, check_answer(answer, soluce))
+
+            #TODO: print the board game : answer 1 - reponse 1 \n answer 2 - response 2
+                #TODO: get the answer in board
+                #TODO: get the response in board
+
+            if answer == soluce:
+                win = True
+        
+        if win:
+            print('You win !!')
+            print(f'Congratulation, you beat the computer mind in {turn} turns\n')
+        else:
+            print('You loose ...')
+            print('Guess it\'s not for everyone to beat his own computer ...\n')
         
         # Exit or restart
         play = begin_game('Another game [y/n] ? : ', 'again')
@@ -105,6 +121,40 @@ def input_setup(setup, phrase, color=None):  #TODO: MasterMind it
                 print(f'You must enter a color in {color}')
 
     return level if setup == 'level' else choice
+
+
+def ask_answer(sol, color):
+    answer = []
+
+    for unknown in range(len(sol)):
+        unknown += 1
+        choice = input_setup('choice', f'What\'s your guess for color {unknown} : ', color)
+
+        answer.append(choice)
+
+    print(f'\nYou bet on {answer}\n')
+    
+    return answer
+
+
+def check_answer(answer, soluce):  #FIXME: problem if 2 times the same color
+    temp_soluce = soluce.copy()
+    response = {
+        'Correct': 0,
+        'Misplaced': 0,
+        'Inexistant': 0
+    }
+    start = 0
+    for i, ans in enumerate(answer):
+        if ans == temp_soluce[i]:
+            response['Correct'] += 1
+            del(temp_soluce[i])
+        elif ans in temp_soluce:
+            response['Misplaced'] += 1
+        else:
+            response['Inexistant'] += 1
+
+    return response
 
 
 if __name__ == '__main__':
