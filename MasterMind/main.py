@@ -144,7 +144,7 @@ def check_answer(answer, soluce):  #FIXME: problem if 2 times the same color
         'Misplaced': 0,
         'Inexistant': 0
     }
-    print(temp_soluce)
+    
     for i, ans in enumerate(answer):
         if ans == soluce[i]:
             response['Correct'] += 1
