@@ -1,11 +1,11 @@
-"""Greater_minder - The ultimate fun breaker"""
+"""Greater-Smaller - The ultimate fun breaker"""
 import sys
 import random
 
 
 def main():
     """Main function of the game"""
-    print('### Greater-Minder - The ultimate fun breaker! ###')
+    print('### Greater-Smaller - The ultimate fun breaker! ###')
 
     play = begin_game('Let\'s play the game [y/n] ? : ', 'begin')
 
@@ -37,7 +37,7 @@ def main():
                 print(f'The number is greater than {choice}\n')
                 lower = choice
             else:
-                print(f'The number is minder than {choice}\n')
+                print(f'The number is smaller than {choice}\n')
                 upper = choice
 
         if win:
