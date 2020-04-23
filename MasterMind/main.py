@@ -9,7 +9,7 @@ def main():
     """The main function of the game"""
     print('### The Master of the Mind ! ###')
     print('# Can you read into the machine\'s brain ?\n')
-    
+
     play = begin_game('Wanna try to master the Mind ? [y/n] : ', 'begin')
 
     while play:
@@ -17,6 +17,7 @@ def main():
         soluce = set_difficulty(COLOR)
         win = False
         turn = 0
+        board = []
 
         while turn < RUN and not win:
             # Game loop
@@ -27,23 +28,21 @@ def main():
             print('-' * len(f'Attempt {turn}/{RUN}'))
 
             answer = ask_answer(soluce, COLOR)
-            
-            print(answer, check_answer(answer, soluce))
 
-            #TODO: print the board game : answer 1 - reponse 1 \n answer 2 - response 2
-                #TODO: get the answer in board
-                #TODO: get the response in board
+            board.append([answer, check_answer(answer, soluce)])
+
+            print_board(board)
 
             if answer == soluce:
                 win = True
-        
+
         if win:
-            print('You win !!')
+            print('\nYou WIN !!')
             print(f'Congratulation, you beat the computer mind in {turn} turns\n')
         else:
             print('You loose ...')
             print('Guess it\'s not for everyone to beat his own computer ...\n')
-        
+
         # Exit or restart
         play = begin_game('Another game [y/n] ? : ', 'again')
 
@@ -77,11 +76,13 @@ def begin_game(phrase, setup):
 
 def set_difficulty(color):
     """Ask the user for a difficulty level"""
-    level = input_setup('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ') + 3
+    level = input_setup('level',
+                        '\nAt which level of difficulty do you want to play [1/2/3] ? : '
+                       ) + 3
 
     sol = []
 
-    for x in range(level):
+    for _ in range(level):
         sol.append(color[randint(0, len(color) - 1)])
 
     print(f'You have {RUN} turn to find {len(sol)} colors')
@@ -90,7 +91,7 @@ def set_difficulty(color):
     return sol
 
 
-def input_setup(setup, phrase, color=None):  #TODO: MasterMind it
+def input_setup(setup, phrase, color=None):
     """Ask the user the phrase to declare the level or the choice.
 
     Input:
@@ -124,6 +125,15 @@ def input_setup(setup, phrase, color=None):  #TODO: MasterMind it
 
 
 def ask_answer(sol, color):
+    """
+    Ask the player for it's answer.
+
+    Input:
+        - sol: the list with the solution
+        - color: the list containing possible color to pick
+    Output:
+        - answer: the answer of the player (list)
+    """
     answer = []
 
     for unknown in range(len(sol)):
@@ -133,28 +143,71 @@ def ask_answer(sol, color):
         answer.append(choice)
 
     print(f'\nYou bet on {answer}\n')
-    
+
     return answer
 
 
-def check_answer(answer, soluce):  #FIXME: problem if 2 times the same color
-    temp_soluce = soluce.copy()
+def check_answer(answer, soluce):
+    """Get the number of correct & misplaced colors
+    Input :
+        - soluce : the list of the solution
+        - answer : the list containing the answer of the player
+    Output:
+        - response: a dict (see the declaration above)
+    """
     response = {
         'Correct': 0,
-        'Misplaced': 0,
-        'Inexistant': 0
+        'Misplaced': 0
     }
-    
-    for i, ans in enumerate(answer):
-        if ans == soluce[i]:
-            response['Correct'] += 1
-            temp_soluce.remove(ans)
-        elif ans in temp_soluce:
-            response['Misplaced'] += 1
-        else:
-            response['Inexistant'] += 1
+
+    response['Correct'] = check_correct(soluce, answer)
+    response['Misplaced'] = check_misplaced(soluce, answer) - response['Correct']
+
 
     return response
+
+def check_correct(soluce, answer):
+    """Get the number of correct placed colors"""
+    return sum([answer[i] == soluce[i] for i in range(len(answer))])
+
+def check_misplaced(soluce, answer):
+    """
+    Count the nb of color in the answer that are in the soluce.
+
+    To have the number of misplaced, the nb of exact match must be substracted.
+    """
+    temp_sol = soluce.copy()
+    misplaced = 0
+
+    for i in answer:
+        if i in temp_sol:
+            temp_sol.remove(i)
+            misplaced += 1
+
+    return misplaced
+
+
+def print_board(board):
+    """
+    Print all the attempt & their associate check into console
+
+    Input:
+        - board: a list containing :
+            - the answer of the player
+            - the check answer dict
+    """
+    for idx, attempt in enumerate(board):
+        space = 0
+
+        for color in attempt[0]:
+            space += len(color)
+
+        print(f'Trun {idx + 1} : ',
+              attempt[0],
+              ' ' * ((len(attempt[0]) * 6) - space),
+              '- ',
+              attempt[1]
+             )
 
 
 if __name__ == '__main__':
