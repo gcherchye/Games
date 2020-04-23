@@ -166,9 +166,11 @@ def check_answer(answer, soluce):
 
     return response
 
+
 def check_correct(soluce, answer):
     """Get the number of correct placed colors"""
     return sum([answer[i] == soluce[i] for i in range(len(answer))])
+
 
 def check_misplaced(soluce, answer):
     """
