@@ -17,7 +17,7 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
 
-        # Switch the comments on these blocks for fullscreen or window screen
+        # # Switch the comments on these blocks for fullscreen or window screen
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
@@ -84,6 +84,23 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+        self._check_bullet_aliens_collision()
+
+    def _check_bullet_aliens_collision(self):
+        """Respond to bullet-aliens collisions"""
+        # Remove any bullets and aliens that collided
+        collisions = pygame.sprite.groupcollide(
+            self.bullets,
+            self.aliens,
+            True,  # dokill1: if True, the bullet is gone if coll
+            True  # dokill2: if True, the alien is gone if coll
+        )
+        # Create a new fleet if every aliens is down
+        if not self.aliens:
+            # Destroy existing bullets and create new fleet
+            self.bullets.empty()
+            self._create_fleet()
 
     def _create_fleet(self):
         """Create the fleet of aliens"""
