@@ -9,7 +9,7 @@
 
 # Allow these types
 !*.py
-!*.png
+!*.bmp
 
 # Forget
 nocommit*
