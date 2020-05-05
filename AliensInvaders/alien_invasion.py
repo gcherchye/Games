@@ -1,10 +1,12 @@
 """The AlienInvasion class - main file"""
 import sys
+from time import sleep
 
 import pygame
 
 from alien import Alien
 from bullet import Bullet
+from game_stat import GameStats
 from settings import Settings
 from ship import Ship
 
@@ -25,6 +27,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption('Alien Invasion')
+
+        # Create an instance to store game statistics
+        self.stats = GameStats(self)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -140,7 +145,10 @@ class AlienInvasion:
 
         # Look for alien-ship collision
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            print('Ship hit !!!!!')
+            self._ship_hit()
+
+        # Looks for aliens hitting the bottom of the screen
+        self._check_aliens_bottom()
 
     def _check_fleet_edge(self):
         for alien in self.aliens.sprites():
@@ -153,6 +161,31 @@ class AlienInvasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.alien_drop_speed
         self.settings.fleet_direction *= -1
+
+    def _ship_hit(self):
+        """Respond to the ship being hit by an alien"""
+        # Decrement ship_left
+        self.stats.ships_left -= 1
+
+        # Get rid of any remaining bullets and aliens
+        self.bullets.empty()
+        self.aliens.empty()
+
+        # Create a new fleet and recenter the ship
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Little pause for the suspens
+        sleep(0.5)
+    
+    def _check_aliens_bottom(self):
+        """Check if the aliens have reach the bottom of the screen"""
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                # Same treatment as the ship hit
+                self._ship_hit()
+                break
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
