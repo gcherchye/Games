@@ -1,3 +1,6 @@
+"""The Settings used in the game."""
+
+
 class Settings:
     """A class to store all settings for Alien Invasion."""
 

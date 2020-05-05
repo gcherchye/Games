@@ -1,3 +1,4 @@
+"""The AlienInvasion class - main file"""
 import sys
 
 import pygame
@@ -12,8 +13,12 @@ class AlienInvasion:
     def __init__(self):
         """Initialize the game, and create game ressources."""
         pygame.init()
-
         self.settings = Settings()
+
+        # Switch the comments on these blocks for fullscreen or window screen
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.settings.screen_width = self.screen.get_rect().width
+        # self.settings.screen_height = self.screen.get_rect().height
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
@@ -25,9 +30,9 @@ class AlienInvasion:
         """Start the main loop for the game."""
         while True:
             # Watch for keyboard and mouse event
-            self._check_events()            
+            self._check_events()
             self.ship.update()
-            self._update_screen()            
+            self._update_screen()
 
     def _check_events(self):
         """Response to keypresses ans mouse events"""
