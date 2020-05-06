@@ -75,6 +75,9 @@ class AlienInvasion:
 
     def _start_game(self):
         """Start the game"""
+        # Reset the dynamic settings
+        self.settings.initiate_dynamic_settings()
+
         # Hide the mouse cursor
         pygame.mouse.set_visible(False)
 
@@ -142,6 +145,7 @@ class AlienInvasion:
             # Destroy existing bullets and create new fleet
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _create_fleet(self):
         """Create the fleet of aliens"""
