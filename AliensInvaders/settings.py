@@ -24,7 +24,7 @@ class Settings:
         self.alien_drop_speed = 10
 
         # Leveling settings
-        self.speedup_scale = 1.1
+        self.speedup_scale = 1.1  #TODO: 1.05 == easy, 1.1 == normal, 1.2 == hard
 
         # Dynamic settings
         self.initiate_dynamic_settings()
