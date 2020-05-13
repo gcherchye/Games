@@ -20,7 +20,7 @@ class AlienInvasion:
         """Initialize the game, and create game ressources."""
         pygame.init()
         self.settings = Settings()
-        # self.clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         # # Switch the comments on these blocks for fullscreen or window screen
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -55,7 +55,7 @@ class AlienInvasion:
                 self._update_aliens()
 
             self._update_screen()
-            # self.clock.tick(300)
+            self.clock.tick(300)
 
     def _check_events(self):
         """Response to keypresses ans mouse events"""
@@ -89,6 +89,7 @@ class AlienInvasion:
         self.stats.game_active = True
         self.scoreboard.prep_score()
         self.scoreboard.prep_level()
+        self.scoreboard.prep_ships()
 
         # Get rid of all remaining alien and bullets
         self.aliens.empty()
@@ -224,6 +225,7 @@ class AlienInvasion:
         if self.stats.ships_left > 0:
             # Decrement ship_left
             self.stats.ships_left -= 1
+            self.scoreboard.prep_ships()
 
             # Get rid of any remaining bullets and aliens
             self.bullets.empty()

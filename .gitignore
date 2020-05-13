@@ -6,6 +6,7 @@
 !.gitignore
 !readme.md
 !.gitkeep
+requirements.txt
 
 # Allow these types
 !*.py
