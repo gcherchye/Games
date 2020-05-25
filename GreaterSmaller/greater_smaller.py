@@ -1,4 +1,6 @@
 """Greater-Smaller - The ultimate fun breaker"""
+from __future__ import absolute_import
+
 import sys
 import random
 
@@ -75,7 +77,8 @@ def begin_game(phrase, setup):
 
 def set_difficulty():
     """Ask the user for a difficulty level"""
-    level = input_int('level', '\nAt which level of difficulty do you want to play [1/2/3] ? : ')
+    lev_msg = '\nAt which level of difficulty do you want to play [1/2/3] ? : '
+    level = input_int('level', lev_msg)
 
     if level == 1:
         run = 15
