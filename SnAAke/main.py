@@ -30,10 +30,12 @@ class SnakeGame:
     def run_game(self):
         """Main game's loop"""
         while self.run:
-            pygame.time.delay(50)
-            self.clock.tick(20)
+            pygame.time.delay(100)
+            self.clock.tick(5)
 
             self._check_events()
+
+            self.snake.move()
 
             self._update_screen()
 
@@ -51,6 +53,14 @@ class SnakeGame:
         """Responses to keys pressed"""
         if event.key == pygame.K_ESCAPE:
             self.run = False
+        elif event.key in (pygame.K_UP, pygame.K_w):
+            self.snake.change_direction('up')
+        elif event.key in (pygame.K_DOWN, pygame.K_s):
+            self.snake.change_direction('down')
+        elif event.key in (pygame.K_LEFT, pygame.K_a):
+            self.snake.change_direction('left')
+        elif event.key in (pygame.K_RIGHT, pygame.K_d):
+            self.snake.change_direction('right')
 
     def _update_screen(self):
         """Update the images on the screen and flip to the new screen"""

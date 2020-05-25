@@ -20,6 +20,16 @@ class Snake():
 
         # Body variable
         self.element_size = self.settings.case_width - 2
+        self.color = self.settings.snake_color
+        self.body = []
+
+        # Direction flag
+        self.direction = 'stop'
+
+    def draw_snake(self):
+        """Draw the snake on the screen"""
+        # Draw the head
+        self.seg = []
         self.head = pygame.Rect(
             self.pos_x_idx * self.settings.case_width + 1,
             self.pos_y_idx * self.settings.case_width + 1,
@@ -27,16 +37,6 @@ class Snake():
             self.element_size
         )
 
-        self.color = self.settings.snake_color
-        self.body = []
-        self.seg = []
-
-        # Direction flag
-        self.direction = 'up'
-
-    def draw_snake(self):
-        """Draw the snake on the screen"""
-        # Draw the head
         pygame.draw.rect(
             self.screen,
             self.color,
@@ -83,7 +83,7 @@ class Snake():
 
     def move(self):
         """Trigger the flags movements"""
-        for index in range(len(self.body - 1, 0, -1)):
+        for index in range(len(self.body) - 1, 0, -1):
             pos_x = self.body[index - 1][0]
             pos_y = self.body[index - 1][1]
 
@@ -99,3 +99,35 @@ class Snake():
             self.pos_x_idx -= self.speed
         if self.direction == 'right':
             self.pos_x_idx += self.speed
+        
+        self.boundary_move()
+
+    def boundary_move(self):
+        """Handle the mouvement outside the screen"""
+        if self.direction == 'up' and self.pos_y_idx < 0:
+            self.pos_y_idx = self.settings.nb_rows - 1
+        elif self.direction == 'down' and \
+                self.pos_y_idx > self.settings.nb_rows - 1:
+            self.pos_y_idx = 0
+        elif self.direction == 'left' and self.pos_x_idx < 0:
+            self.pos_x_idx = self.settings.nb_rows -1
+        elif self.direction == 'right' and \
+                self.pos_x_idx > self.settings.nb_rows - 1:
+            self.pos_x_idx = 0
+
+    def change_direction(self, direction):
+        """Change the direction to tu input direction
+        Only if not reverse
+
+        Arguments:
+            direction {string} -- the desired direction :
+                        - up / down / left / right
+        """
+        if self.direction != 'down' and direction == 'up':
+            self.direction = 'up'
+        if self.direction != 'up' and direction == 'down':
+            self.direction = 'down'
+        if self.direction != 'left' and direction == 'right':
+            self.direction = 'right'
+        if self.direction != 'right' and direction == 'left':
+            self.direction = 'left'
