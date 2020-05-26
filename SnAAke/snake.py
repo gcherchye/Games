@@ -24,6 +24,7 @@ class Snake():
         self.body = []
         self.seg = []
         self.head = pygame.Rect(0, 0, 0, 0)
+        self.collision = False
 
         # Direction flag
         self.direction = 'stop'
@@ -134,3 +135,9 @@ class Snake():
             self.direction = 'right'
         if self.direction != 'right' and direction == 'left':
             self.direction = 'left'
+
+    def is_collision(self):
+        """check for collision with itself"""
+        for segment in self.seg:
+            if self.head.colliderect(segment):
+                self.collision = True

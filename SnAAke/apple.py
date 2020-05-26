@@ -21,12 +21,7 @@ class Apple:
         self.color = self.settings.apple_color
         self.size = self.settings.case_width - 4
 
-        self.apple = pygame.Rect(
-            self.pos_x_idx * self.settings.case_width + 2,
-            self.pos_y_idx * self.settings.case_width + 2,
-            self.size,
-            self.size
-        )
+        self.apple = pygame.Rect(0, 0, 0, 0)
 
     def _get_starting_pos(self):
         """Get a random starting position but not the snake's one"""
@@ -38,6 +33,13 @@ class Apple:
 
     def draw_apple(self):
         """Draw the apple to the screen"""
+        self.apple = pygame.Rect(
+            self.pos_x_idx * self.settings.case_width + 2,
+            self.pos_y_idx * self.settings.case_width + 2,
+            self.size,
+            self.size
+        )
+
         pygame.draw.rect(
             self.screen,
             self.color,

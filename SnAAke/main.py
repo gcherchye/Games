@@ -8,6 +8,9 @@ from settings import Settings
 from snake import Snake
 
 
+# FIXME: check collision got a problem
+# FIXME: apple generate on the snake
+
 class SnakeGame:
     """Overall Class to manage game and behavior"""
 
@@ -30,8 +33,7 @@ class SnakeGame:
     def run_game(self):
         """Main game's loop"""
         while self.run:
-            pygame.time.delay(100)
-            self.clock.tick(5)
+            self.clock.tick(15)
 
             self._check_events()
 
@@ -64,13 +66,27 @@ class SnakeGame:
 
     def _update_screen(self):
         """Update the images on the screen and flip to the new screen"""
+        # Fill the screen with background color and draw the grid
         self.screen.fill(self.settings.back_color)
         self._draw_grid()
 
+        self._check_eating()
+
+        # Draw the apple and the snake
         self.apple.draw_apple()
         self.snake.draw_snake()
 
+        # Update the screen
         pygame.display.flip()
+
+    def _check_eating(self):
+        if self.apple.is_eaten(self.snake.head):
+            # TODO: Update score
+            # TODO: Prep score
+            # TODO: check highscore
+
+            self.apple.new_pos()
+            self.snake.add_unit()
 
     def _draw_grid(self):
         """Draw the grid on the screen"""
@@ -100,7 +116,3 @@ class SnakeGame:
 if __name__ == '__main__':
     snake = SnakeGame()
     snake.run_game()
-
-# def main():
-
-#     s = snake((255, 0, 0), (10, 10))
