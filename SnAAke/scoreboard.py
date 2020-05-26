@@ -1,5 +1,5 @@
 """Define the scoreboard"""
-import pygame.font 
+import pygame.font
 
 
 class Scoreboard:
@@ -31,7 +31,7 @@ class Scoreboard:
             True,
             self.color,
         )
-        # Draw the score at the top-right corner
+        # Set the score at the top-right corner
         self.score_rect = self.score_image.get_rect()
         self.score_rect.top = 20
         self.score_rect.right = self.screen_rect.right -20
@@ -39,3 +39,24 @@ class Scoreboard:
     def show_score(self):
         """Show the score on the screen"""
         self.screen.blit(self.score_image, self.score_rect)
+
+    def show_game_over(self):
+        """Show the Game over screen and buttons"""
+        self._prep_game_over_text()
+        
+
+    def _prep_game_over_text(self):
+        """Prep the game over image"""
+        game_over = f'Game Over !\nYour win {self.score} points !'
+
+        for index, line in enumerate(game_over.splitlines()):
+            line_image = self.font.render(
+                line,
+                True,
+                self.color
+            )
+            line_rect = line_image.get_rect()
+            game_over_offset = (0, index * line_rect.height)
+            line_rect.center = tuple(map(sum, zip(self.screen_rect.center, game_over_offset)))
+
+            self.screen.blit(line_image, line_rect)

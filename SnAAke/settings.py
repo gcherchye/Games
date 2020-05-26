@@ -1,5 +1,4 @@
 """Settings class for the whole game"""
-import pygame.font
 
 
 class Settings:
@@ -13,7 +12,6 @@ class Settings:
         self.nb_rows = 21
         self.case_width = self.screen_width // self.nb_rows
         self.back_color = (25, 25, 25)
-        self.line_color = (150, 150, 150)
 
         # Snake settings
         self.snake_color = (0, 204, 0)

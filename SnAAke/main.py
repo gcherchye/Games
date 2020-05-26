@@ -1,6 +1,8 @@
 """The almighty SnAAke game"""
 from __future__ import absolute_import
 
+from time import sleep
+
 import pygame
 
 from apple import Apple
@@ -29,45 +31,46 @@ class SnakeGame:
         self.apple = Apple(self)
         self.scoreboard = Scoreboard(self)
         self.snake = Snake(self)
-        
+
         # Game parameters
+        self.play = True
         self.run = True
 
     def run_game(self):
         """Main game's loop"""
-        while self.run:
-            # Check user input
-            self._check_events()
-
-            # Move the snake and check what the the new pos implies
-            self.snake.move()
-            if self.snake.is_collision():
-                self.run = False
-            self._check_eating()
-
-            # Update the screen
-            self._update_screen()
-
-            if self.snake.is_collision():
-                self.run = False
-
+        while self.play:
             # Tick the clock
             self.clock.tick(10)
 
-        pygame.quit()
+            # Check user input
+            self._check_events()
+
+            if self.run:
+                # Move the snake and check what the the new pos implies
+                self.snake.move()
+                self._check_eating()
+
+                # Update the screen
+                self._update_screen()
+
+            # Tick the clock
+            if self.snake.is_collision():
+                self._game_over()
+
+            #pygame.display.update()
 
     def _check_events(self):
         """Response to keypresses and mouse events"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.run = False
+                self.play = False
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
 
     def _check_keydown_events(self, event):
         """Responses to keys pressed"""
         if event.key == pygame.K_ESCAPE:
-            self.run = False
+            self.play = False
         elif event.key in (pygame.K_UP, pygame.K_w):
             self.snake.change_direction('up')
         elif event.key in (pygame.K_DOWN, pygame.K_s):
@@ -89,7 +92,6 @@ class SnakeGame:
         """Update the images on the screen and flip to the new screen"""
         # Fill the screen with background color and draw the grid
         self.screen.fill(self.settings.back_color)
-        self._draw_grid()
 
         # Draw the apple and the snake
         self.apple.draw_apple()
@@ -101,29 +103,14 @@ class SnakeGame:
         # Update the screen
         pygame.display.flip()
 
-    def _draw_grid(self):
-        """Draw the grid on the screen"""
-        line_mark_x = 0
-        line_mark_y = 0
+    def _game_over(self):
+        """Handle the game over"""
+        # Exit the game loop
+        self.run = False
 
-        for _ in range(self.settings.nb_rows):
-            line_mark_x += self.settings.case_width
-            line_mark_y += self.settings.case_width
-
-            # Draw the horizontal lines
-            pygame.draw.line(
-                self.screen,
-                self.settings.line_color,
-                (line_mark_x, 0),  # Begin point of the line
-                (line_mark_x, self.settings.screen_width)  # End point
-            )
-            # Draw the vertical lines
-            pygame.draw.line(
-                self.screen,
-                self.settings.line_color,
-                (0, line_mark_y),  # Begin point of the line
-                (self.settings.screen_width, line_mark_y)  # End point
-            )
+        # Display game Over to the screen
+        self.scoreboard.show_game_over()
+        pygame.display.flip()
 
 
 if __name__ == '__main__':

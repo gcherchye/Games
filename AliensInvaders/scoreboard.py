@@ -4,6 +4,7 @@ from pygame.sprite import Group
 
 from ship import Ship
 
+
 class Scoreboard:
     """Class to report scoring information"""
 
