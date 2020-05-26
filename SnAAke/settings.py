@@ -1,4 +1,5 @@
 """Settings class for the whole game"""
+import pygame.font
 
 
 class Settings:
@@ -20,3 +21,7 @@ class Settings:
 
         # Apple settings
         self.apple_color = (250, 0, 0)
+
+        # Scoring settings
+        self.score_color = (200, 200, 200)
+        self.score_increment = 5
