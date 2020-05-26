@@ -24,7 +24,6 @@ class Snake():
         self.body = []
         self.seg = []
         self.head = pygame.Rect(0, 0, 0, 0)
-        self.collision = False
 
         # Direction flag
         self.direction = 'stop'
@@ -64,6 +63,8 @@ class Snake():
                     self.color,
                     segment
                 )
+
+                self.seg.append(segment)
 
     def add_unit(self):
         """Add a unit to the snake
@@ -140,4 +141,4 @@ class Snake():
         """check for collision with itself"""
         for segment in self.seg:
             if self.head.colliderect(segment):
-                self.collision = True
+                return True

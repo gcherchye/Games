@@ -8,9 +8,6 @@ from settings import Settings
 from snake import Snake
 
 
-# FIXME: check collision got a problem
-# FIXME: apple generate on the snake
-
 class SnakeGame:
     """Overall Class to manage game and behavior"""
 
@@ -33,13 +30,21 @@ class SnakeGame:
     def run_game(self):
         """Main game's loop"""
         while self.run:
-            self.clock.tick(15)
+            self.clock.tick(10)
 
+            # Check user input
             self._check_events()
 
+            # Move the snake and check what the the new pos implies
             self.snake.move()
+            if self.snake.is_collision():
+                self.run = False
+            self._check_eating()
 
             self._update_screen()
+
+            if self.snake.is_collision():
+                self.run = False
 
         pygame.quit()
 
@@ -68,9 +73,7 @@ class SnakeGame:
         """Update the images on the screen and flip to the new screen"""
         # Fill the screen with background color and draw the grid
         self.screen.fill(self.settings.back_color)
-        self._draw_grid()
-
-        self._check_eating()
+        self._draw_grid()        
 
         # Draw the apple and the snake
         self.apple.draw_apple()
@@ -85,7 +88,7 @@ class SnakeGame:
             # TODO: Prep score
             # TODO: check highscore
 
-            self.apple.new_pos()
+            self.apple.new_pos(self.snake.body)
             self.snake.add_unit()
 
     def _draw_grid(self):

@@ -52,7 +52,17 @@ class Apple:
         """
         return self.apple.colliderect(head)
 
-    def new_pos(self):
-        """Generate a new position for the apple"""
-        self.pos_x_idx = random.randint(0, self.settings.nb_rows - 1)
-        self.pos_y_idx = random.randint(0, self.settings.nb_rows - 1)
+    def new_pos(self, body):
+        """Generate a new position for the apple if this new position
+        is not already occupied by the snake.
+
+        Arguments:
+            body {list} -- the list of the snake's body position
+        """
+        if body:
+            while [self.pos_x_idx, self.pos_y_idx] in body:
+                self.pos_x_idx = random.randint(0, self.settings.nb_rows - 1)
+                self.pos_y_idx = random.randint(0, self.settings.nb_rows - 1)
+        else:
+            self.pos_x_idx = random.randint(0, self.settings.nb_rows - 1)
+            self.pos_y_idx = random.randint(0, self.settings.nb_rows - 1)
