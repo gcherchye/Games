@@ -14,6 +14,8 @@ class Apple:
         self.screen = snake_game.screen
 
         # Starting position
+        self.pos_x_idx = 0
+        self.pos_y_idx = 0
         self._get_starting_pos()
 
         self.color = self.settings.apple_color

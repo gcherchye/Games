@@ -22,14 +22,17 @@ class Snake():
         self.element_size = self.settings.case_width - 2
         self.color = self.settings.snake_color
         self.body = []
+        self.seg = []
+        self.head = pygame.Rect(0, 0, 0, 0)
 
         # Direction flag
         self.direction = 'stop'
 
     def draw_snake(self):
         """Draw the snake on the screen"""
-        # Draw the head
         self.seg = []
+
+        # Draw the head
         self.head = pygame.Rect(
             self.pos_x_idx * self.settings.case_width + 1,
             self.pos_y_idx * self.settings.case_width + 1,
@@ -99,7 +102,7 @@ class Snake():
             self.pos_x_idx -= self.speed
         if self.direction == 'right':
             self.pos_x_idx += self.speed
-        
+
         self.boundary_move()
 
     def boundary_move(self):
@@ -110,7 +113,7 @@ class Snake():
                 self.pos_y_idx > self.settings.nb_rows - 1:
             self.pos_y_idx = 0
         elif self.direction == 'left' and self.pos_x_idx < 0:
-            self.pos_x_idx = self.settings.nb_rows -1
+            self.pos_x_idx = self.settings.nb_rows - 1
         elif self.direction == 'right' and \
                 self.pos_x_idx > self.settings.nb_rows - 1:
             self.pos_x_idx = 0
