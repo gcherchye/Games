@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import pygame
 
 from apple import Apple
-from button import PlayButton
+from button import PlayButton, ExitButton, RestartButton
 from scoreboard import Scoreboard
 from settings import Settings
 from snake import Snake
@@ -33,6 +33,8 @@ class SnakeGame:
 
         # Game button
         self.play_button = PlayButton(self, 'Play')
+        self.exit_button = ExitButton(self, 'Exit')
+        self.restart_button = RestartButton(self, 'Restart')
 
         # Game parameters
         self.play = True
@@ -65,6 +67,8 @@ class SnakeGame:
                 mouse_pos = pygame.mouse.get_pos()
                 if not self.game_over:
                     self._check_play_button(mouse_pos)
+                elif self.game_over:
+                    self._check_restart(mouse_pos)
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
 
@@ -84,6 +88,15 @@ class SnakeGame:
 
         # Prep the score
         self.scoreboard.prep_score()
+
+    def _check_restart(self, mouse_pos):
+        exit_clicked = self.exit_button.rect.collidepoint(mouse_pos)
+        restart_clicked = self.restart_button.rect.collidepoint(mouse_pos)
+
+        if exit_clicked:
+            self.play = False
+        if restart_clicked:
+            pass # TODO: _restart_game
 
     def _check_keydown_events(self, event):
         """Responses to keys pressed"""
@@ -124,7 +137,7 @@ class SnakeGame:
 
         # Draw the play button if needed
         if not self.run and not self.game_over:
-            self.play_button.draw_button()
+            self.play_button.draw_play()
 
         # Update the screen
         pygame.display.flip()
@@ -140,6 +153,8 @@ class SnakeGame:
 
         # Display game Over to the screen
         self.scoreboard.prep_game_over()
+        self.exit_button.draw_exit()
+        self.restart_button.draw_restart()
 
 
 if __name__ == '__main__':

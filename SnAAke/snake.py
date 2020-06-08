@@ -125,7 +125,7 @@ class Snake():
         Only if not reverse
 
         Arguments:
-            direction {string} -- the desired direction :
+            direction {str} -- the desired direction :
                         - up / down / left / right
         """
         if self.direction != 'down' and direction == 'up':
