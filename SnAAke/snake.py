@@ -139,6 +139,9 @@ class Snake():
 
     def is_collision(self):
         """check for collision with itself"""
+        collision = False
         for segment in self.seg:
             if self.head.colliderect(segment):
-                return True
+                collision = True
+
+        return collision

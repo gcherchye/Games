@@ -18,6 +18,8 @@ class Scoreboard:
         self.reset_score()
         self.prep_score()
 
+        self.prep_game_over()
+
     def reset_score(self):
         """Reinitialize the score"""
         self.score = 0
@@ -34,29 +36,26 @@ class Scoreboard:
         # Set the score at the top-right corner
         self.score_rect = self.score_image.get_rect()
         self.score_rect.top = 20
-        self.score_rect.right = self.screen_rect.right -20
+        self.score_rect.right = self.screen_rect.right - 20
 
     def show_score(self):
         """Show the score on the screen"""
         self.screen.blit(self.score_image, self.score_rect)
 
-    def show_game_over(self):
-        """Show the Game over screen and buttons"""
-        self._prep_game_over_text()
-        
-
-    def _prep_game_over_text(self):
+    def prep_game_over(self):
         """Prep the game over image"""
-        game_over = f'Game Over !\nYour win {self.score} points !'
+        game_over = f'Game Over !\nYou win {self.score} points !'
 
         for index, line in enumerate(game_over.splitlines()):
-            line_image = self.font.render(
+            self.line_image = self.font.render(
                 line,
                 True,
                 self.color
             )
-            line_rect = line_image.get_rect()
-            game_over_offset = (0, index * line_rect.height)
-            line_rect.center = tuple(map(sum, zip(self.screen_rect.center, game_over_offset)))
-
-            self.screen.blit(line_image, line_rect)
+            self.line_rect = self.line_image.get_rect()
+            game_over_offset = index * self.line_rect.height
+            self.line_rect.centery = (
+                self.screen_rect.centery
+                - self.screen_rect.height / 4) + game_over_offset
+            self.line_rect.centerx = self.screen_rect.centerx
+            self.screen.blit(self.line_image, self.line_rect)
