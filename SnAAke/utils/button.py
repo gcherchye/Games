@@ -63,6 +63,9 @@ class PlayButton(Buttons):
         # Set the position of the button
         self.rect.center = self.screen_rect.center
 
+        # Prep the message at the correct place
+        self._prep_message(msg)
+
 
 class ExitButton(Buttons):
     """The Exit buttons"""
@@ -74,6 +77,9 @@ class ExitButton(Buttons):
         self.rect.centerx = self.screen_rect.width / 4
         self.rect.centery = 3 * self.screen_rect.height / 4
 
+        # Prep the message at the correct place
+        self._prep_message(msg)
+
 
 class RestartButton(Buttons):
     """The Restart button"""
@@ -84,3 +90,6 @@ class RestartButton(Buttons):
         # Set the position of the button
         self.rect.centerx = 3 * self.screen_rect.width / 4
         self.rect.centery = 3 * self.screen_rect.height / 4
+
+        # Prep the message at the correct place
+        self._prep_message(msg)
