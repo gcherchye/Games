@@ -3,11 +3,11 @@ from __future__ import absolute_import
 
 import pygame
 
-from apple import Apple
-from button import PlayButton, ExitButton, RestartButton
-from scoreboard import Scoreboard
-from settings import Settings
-from snake import Snake
+from utils.apple import Apple
+from utils.button import PlayButton, ExitButton, RestartButton
+from utils.scoreboard import Scoreboard
+from utils.settings import Settings
+from utils.snake import Snake
 
 
 class SnakeGame:
@@ -101,6 +101,7 @@ class SnakeGame:
     def _restart_game(self):
         """Handle restart events"""
         self.scoreboard.reset_score()
+
         self.snake.body = []
         self.snake.pos_x_idx = self.settings.nb_rows // 2
         self.snake.pos_y_idx = self.settings.nb_rows // 2
@@ -147,7 +148,7 @@ class SnakeGame:
 
         # Draw the play button if needed
         if not self.run and not self.game_over:
-            self.play_button.draw_play()
+            self.play_button.draw()
 
         # Update the screen
         pygame.display.flip()
@@ -163,8 +164,8 @@ class SnakeGame:
 
         # Display game Over to the screen
         self.scoreboard.prep_game_over()
-        self.exit_button.draw_exit()
-        self.restart_button.draw_restart()
+        self.exit_button.draw()
+        self.restart_button.draw()
 
 
 if __name__ == '__main__':
