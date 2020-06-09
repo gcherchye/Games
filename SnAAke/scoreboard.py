@@ -23,6 +23,7 @@ class Scoreboard:
     def reset_score(self):
         """Reinitialize the score"""
         self.score = 0
+        self.prep_score()
 
     def prep_score(self):
         """Turn score into a rendered image"""

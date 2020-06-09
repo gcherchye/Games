@@ -96,7 +96,17 @@ class SnakeGame:
         if exit_clicked:
             self.play = False
         if restart_clicked:
-            pass # TODO: _restart_game
+            self._restart_game()
+
+    def _restart_game(self):
+        """Handle restart events"""
+        self.scoreboard.reset_score()
+        self.snake.body = []
+        self.snake.pos_x_idx = self.settings.nb_rows // 2
+        self.snake.pos_y_idx = self.settings.nb_rows // 2
+        self.snake.direction = 'stop'
+
+        self.run = True
 
     def _check_keydown_events(self, event):
         """Responses to keys pressed"""
