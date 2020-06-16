@@ -18,51 +18,59 @@ class Snake():
         self.pos_x_idx = self.settings.nb_rows // 2
         self.pos_y_idx = self.settings.nb_rows // 2
 
+        # head variable
+        self.head = pygame.transform.scale(
+            pygame.image.load(r'utils\Images\head_up.png'),
+            (self.settings.element_size, self.settings.element_size)
+        )
+        self.head_rect = self.head.get_rect()
+        self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
+        self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
+
         # Body variable
-        self.element_size = self.settings.case_width - 2
-        self.color = self.settings.snake_color
+        self.body_image = pygame.transform.scale(
+            pygame.image.load(r'utils\Images\body.png'),
+            (self.settings.element_size, self.settings.element_size)
+        )
+        self.body_elem_rect = self.body_image.get_rect()
+
         self.body = []
         self.seg = []
-        self.head = pygame.Rect(0, 0, 0, 0)
 
-        # Direction flag
+        # Flags
         self.direction = 'stop'
+        self.collision = False
 
     def draw_snake(self):
         """Draw the snake on the screen"""
         self.seg = []
 
         # Draw the head
-        self.head = pygame.Rect(
-            self.pos_x_idx * self.settings.case_width + 1,
-            self.pos_y_idx * self.settings.case_width + 1,
-            self.element_size,
-            self.element_size
-        )
+        self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
+        self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
 
-        pygame.draw.rect(
-            self.screen,
-            self.color,
-            self.head
-        )
+        self.screen.blit(self.head, self.head_rect)
 
         # Draw the rest of the body
         if len(self.body) > 0:
             for unit in self.body:
                 segment = pygame.Rect(
-                    unit[0] * self.settings.case_width + 1,
-                    unit[1] * self.settings.case_width + 1,
-                    self.element_size,
-                    self.element_size
+                    unit[0] * self.settings.case_width + 2,
+                    unit[1] * self.settings.case_width + 2,
+                    self.settings.element_size,
+                    self.settings.element_size
                 )
 
-                self.seg.append(segment)
-
-                pygame.draw.rect(
-                    self.screen,
-                    self.color,
+                self.screen.blit(
+                    self.body_image,
                     segment
                 )
+
+                # pygame.draw.rect(
+                #     self.screen,
+                #     self.color,
+                #     segment
+                # )
 
                 self.seg.append(segment)
 
@@ -121,8 +129,7 @@ class Snake():
             self.pos_x_idx = 0
 
     def change_direction(self, direction):
-        """Change the direction to tu input direction
-        Only if not reverse
+        """Change the direction to the input direction if not reverse
 
         Arguments:
             direction {str} -- the desired direction :
@@ -139,9 +146,17 @@ class Snake():
 
     def is_collision(self):
         """check for collision with itself"""
-        collision = False
         for segment in self.seg:
-            if self.head.colliderect(segment):
-                collision = True
+            if self.head_rect.colliderect(segment):
+                self.collision = True
 
-        return collision
+        return self.collision
+
+    def reset_snake(self):
+        """Reset the snake parameter to default if game over"""
+        self.body = []
+        self.pos_x_idx = self.settings.nb_rows // 2
+        self.pos_y_idx = self.settings.nb_rows // 2
+
+        self.direction = 'stop'
+        self.collision = False

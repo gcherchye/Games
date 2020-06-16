@@ -11,7 +11,9 @@
 # Allow these types
 !*.py
 !*.bmp
+!*.png
 
 # Forget
 nocommit*
 venv*
+test.py

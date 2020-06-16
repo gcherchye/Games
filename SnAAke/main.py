@@ -45,7 +45,7 @@ class SnakeGame:
         """Main game's loop"""
         while self.play:
             # Tick the clock
-            self.clock.tick(15)
+            self.clock.tick(self.settings.fps)
 
             # Check user input
             self._check_events()
@@ -90,6 +90,11 @@ class SnakeGame:
         self.scoreboard.prep_score()
 
     def _check_restart(self, mouse_pos):
+        """Check if the restart or the exit button is clicked
+
+        Args:
+            mouse_pos (tuple): the coordinate of the mouse pos on the screen
+        """
         exit_clicked = self.exit_button.rect.collidepoint(mouse_pos)
         restart_clicked = self.restart_button.rect.collidepoint(mouse_pos)
 
@@ -102,10 +107,7 @@ class SnakeGame:
         """Handle restart events"""
         self.scoreboard.reset_score()
 
-        self.snake.body = []
-        self.snake.pos_x_idx = self.settings.nb_rows // 2
-        self.snake.pos_y_idx = self.settings.nb_rows // 2
-        self.snake.direction = 'stop'
+        self.snake.reset_snake()
 
         self.run = True
 
@@ -123,7 +125,7 @@ class SnakeGame:
             self.snake.change_direction('right')
 
     def _check_eating(self):
-        if self.apple.is_eaten(self.snake.head):
+        if self.apple.is_eaten(self.snake.head_rect):
             self.scoreboard.score += self.settings.score_increment
             self.scoreboard.prep_score()
 

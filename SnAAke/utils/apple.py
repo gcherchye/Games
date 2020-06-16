@@ -13,15 +13,18 @@ class Apple:
         self.settings = snake_game.settings
         self.screen = snake_game.screen
 
+        # Image
+        self.image = pygame.image.load(r'utils\Images\apple.png')
+        self.image = pygame.transform.scale(
+            self.image,
+            (self.settings.element_size, self.settings.element_size)
+        )
+        self.rect = self.image.get_rect()
+
         # Starting position
         self.pos_x_idx = 0
         self.pos_y_idx = 0
         self._get_starting_pos()
-
-        self.color = self.settings.apple_color
-        self.size = self.settings.case_width - 4
-
-        self.apple = pygame.Rect(0, 0, 0, 0)
 
     def _get_starting_pos(self):
         """Get a random starting position but not the snake's one"""
@@ -33,24 +36,17 @@ class Apple:
 
     def draw_apple(self):
         """Draw the apple to the screen"""
-        self.apple = pygame.Rect(
-            self.pos_x_idx * self.settings.case_width + 2,
-            self.pos_y_idx * self.settings.case_width + 2,
-            self.size,
-            self.size
-        )
+        self.rect.x = self.pos_x_idx * self.settings.case_width + 2
+        self.rect.y = self.pos_y_idx * self.settings.case_width + 2
 
-        pygame.draw.rect(
-            self.screen,
-            self.color,
-            self.apple
-        )
+        self.screen.blit(self.image, self.rect)
+
 
     def is_eaten(self, head):
         """Check if the head of the snake collide with the apple
         i.e.: the apple is eaten by the snake
         """
-        return self.apple.colliderect(head)
+        return self.rect.colliderect(head)
 
     def new_pos(self, body):
         """Generate a new position for the apple if this new position
