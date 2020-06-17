@@ -19,11 +19,24 @@ class Snake():
         self.pos_y_idx = self.settings.nb_rows // 2
 
         # head variable
-        self.head = pygame.transform.scale(
-            pygame.image.load(r'utils\Images\head_up.png'),
+        self.head_up = pygame.transform.scale(
+            pygame.image.load(r'utils\Images\head.png'),
             (self.settings.element_size, self.settings.element_size)
         )
-        self.head_rect = self.head.get_rect()
+        self.head_down = pygame.transform.rotate(
+            self.head_up,
+            180
+        )
+        self.head_right = pygame.transform.rotate(
+            self.head_up,
+            -90
+        )
+        self.head_left = pygame.transform.rotate(
+            self.head_up,
+            90
+        )
+
+        self.head_rect = self.head_up.get_rect()
         self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
         self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
 
@@ -49,7 +62,14 @@ class Snake():
         self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
         self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
 
-        self.screen.blit(self.head, self.head_rect)
+        if self.direction in ('stop', 'up'):
+            self.screen.blit(self.head_up, self.head_rect)
+        elif self.direction == 'right':
+            self.screen.blit(self.head_right, self.head_rect)
+        elif self.direction == 'left':
+            self.screen.blit(self.head_left, self.head_rect)
+        elif self.direction == 'down':
+            self.screen.blit(self.head_down, self.head_rect)
 
         # Draw the rest of the body
         if len(self.body) > 0:
@@ -65,12 +85,6 @@ class Snake():
                     self.body_image,
                     segment
                 )
-
-                # pygame.draw.rect(
-                #     self.screen,
-                #     self.color,
-                #     segment
-                # )
 
                 self.seg.append(segment)
 
