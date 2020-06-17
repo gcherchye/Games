@@ -26,6 +26,9 @@ class Apple:
         self.pos_y_idx = 0
         self._get_starting_pos()
 
+        # Eating Flag
+        self.eated = False
+
     def _get_starting_pos(self):
         """Get a random starting position but not the snake's one"""
         accepted = list(range(0, self.settings.nb_rows))
@@ -55,10 +58,13 @@ class Apple:
         Arguments:
             body {list} -- the list of the snake's body position
         """
-        if body:
-            while [self.pos_x_idx, self.pos_y_idx] in body:
-                self.pos_x_idx = random.randint(0, self.settings.nb_rows - 1)
-                self.pos_y_idx = random.randint(0, self.settings.nb_rows - 1)
-        else:
-            self.pos_x_idx = random.randint(0, self.settings.nb_rows - 1)
-            self.pos_y_idx = random.randint(0, self.settings.nb_rows - 1)
+        accepted_pos = [[idx_x, idx_y] \
+            for idx_x in range(self.settings.nb_rows) \
+            for idx_y in range(self.settings.nb_rows)]
+
+        for element in body:
+            accepted_pos.remove(element)
+
+        accepted_pos.remove([self.pos_x_idx, self.pos_y_idx])
+
+        self.pos_x_idx, self.pos_y_idx = random.choice(accepted_pos)

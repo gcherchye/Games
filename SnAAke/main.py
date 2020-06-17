@@ -45,14 +45,15 @@ class SnakeGame:
         """Main game's loop"""
         while self.play:
             # Tick the clock
-            self.clock.tick(self.settings.fps)
+            delta_t = self.clock.tick(self.settings.fps)
 
             # Check user input
             self._check_events()
 
             if self.run:
+                step = delta_t / 1000
                 # Move the snake and check what the the new pos implies
-                self.snake.move()
+                self.snake.move(step)
                 self._check_eating()
 
             # Update the screen
@@ -115,22 +116,30 @@ class SnakeGame:
         """Responses to keys pressed"""
         if event.key == pygame.K_ESCAPE:
             self.play = False
-        elif event.key in (pygame.K_UP, pygame.K_w):
-            self.snake.change_direction('up')
-        elif event.key in (pygame.K_DOWN, pygame.K_s):
-            self.snake.change_direction('down')
-        elif event.key in (pygame.K_LEFT, pygame.K_a):
-            self.snake.change_direction('left')
-        elif event.key in (pygame.K_RIGHT, pygame.K_d):
-            self.snake.change_direction('right')
+        if not self.snake.move_recorded:
+            if event.key in (pygame.K_UP, pygame.K_w):
+                self.snake.change_direction('up')
+            elif event.key in (pygame.K_DOWN, pygame.K_s):
+                self.snake.change_direction('down')
+            elif event.key in (pygame.K_LEFT, pygame.K_a):
+                self.snake.change_direction('left')
+            elif event.key in (pygame.K_RIGHT, pygame.K_d):
+                self.snake.change_direction('right')
 
     def _check_eating(self):
-        if self.apple.is_eaten(self.snake.head_rect):
+        """Trigger the events if the snake eat the apple"""
+        if self.apple.is_eaten(self.snake.head_rect) and not self.apple.eated:
             self.scoreboard.score += self.settings.score_increment
             self.scoreboard.prep_score()
 
             self.apple.new_pos(self.snake.body)
+            self.apple.eated = True
+
             self.snake.add_unit()
+            self.snake.increase_speed()   
+
+        if self.snake.moved:
+            self.apple.eated = False
 
     def _update_screen(self):
         """Update the images on the screen and flip to the new screen"""
@@ -145,7 +154,7 @@ class SnakeGame:
             # Draw the score
             self.scoreboard.show_score()
 
-        if self.snake.is_collision():
+        if self.snake.is_self_collision():
             self._game_over()
 
         # Draw the play button if needed
