@@ -9,15 +9,15 @@ class Snake():
         """Initialize the snake and it's starting position"""
         # Settings and screen
         self.settings = snake_game.settings
-        self.screen = snake_game.screen
-        self.screen_rect = snake_game.screen.get_rect()
+        self.window = snake_game.window
+        self.screen_rect = snake_game.screen
 
         # Speed and starting position
         self.speed = self.settings.snake_speed
         self.pos_incr = 0
 
-        self.pos_x_idx = self.settings.nb_rows // 2
-        self.pos_y_idx = self.settings.nb_rows // 2
+        self.pos_x_idx = self.settings.nb_rows_x // 2
+        self.pos_y_idx = self.settings.nb_rows_y // 2
 
         # head variable
         self.head_up = pygame.transform.scale(
@@ -66,13 +66,13 @@ class Snake():
         self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
 
         if self.direction in ('stop', 'up'):
-            self.screen.blit(self.head_up, self.head_rect)
+            self.window.blit(self.head_up, self.head_rect)
         elif self.direction == 'right':
-            self.screen.blit(self.head_right, self.head_rect)
+            self.window.blit(self.head_right, self.head_rect)
         elif self.direction == 'left':
-            self.screen.blit(self.head_left, self.head_rect)
+            self.window.blit(self.head_left, self.head_rect)
         elif self.direction == 'down':
-            self.screen.blit(self.head_down, self.head_rect)
+            self.window.blit(self.head_down, self.head_rect)
 
         # Draw the rest of the body
         if len(self.body) > 0:
@@ -84,7 +84,7 @@ class Snake():
                     self.settings.element_size
                 )
 
-                self.screen.blit(
+                self.window.blit(
                     self.body_image,
                     segment
                 )
@@ -143,16 +143,16 @@ class Snake():
 
     def boundary_move(self):
         """Handle the mouvement outside the screen"""
-        if self.direction == 'up' and self.pos_y_idx < 0:
-            self.pos_y_idx = self.settings.nb_rows - 1
+        if self.direction == 'up' and self.pos_y_idx < 1:
+            self.pos_y_idx = self.settings.nb_rows_y - 4
         elif self.direction == 'down' and \
-                self.pos_y_idx > self.settings.nb_rows - 1:
-            self.pos_y_idx = 0
-        elif self.direction == 'left' and self.pos_x_idx < 0:
-            self.pos_x_idx = self.settings.nb_rows - 1
+                self.pos_y_idx > self.settings.nb_rows_y - 4:
+            self.pos_y_idx = 1
+        elif self.direction == 'left' and self.pos_x_idx < 1:
+            self.pos_x_idx = self.settings.nb_rows_x - 2
         elif self.direction == 'right' and \
-                self.pos_x_idx > self.settings.nb_rows - 1:
-            self.pos_x_idx = 0
+                self.pos_x_idx > self.settings.nb_rows_x - 2:
+            self.pos_x_idx = 1
 
     def change_direction(self, direction):
         """Change the direction to the input direction if not reverse

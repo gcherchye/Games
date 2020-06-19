@@ -20,16 +20,27 @@ class SnakeGame:
 
         # Pygame intiliazing
         pygame.init()
-        self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height)
+
+        # Game Window
+        self.window = pygame.display.set_mode(
+            (self.settings.window_width, self.settings.window_height)
         )
         pygame.display.set_caption('SnAAke')
+
+        # Window field
+        self.screen = pygame.Rect(
+            self.settings.game_left,
+            self.settings.game_top,
+            self.settings.game_width,
+            self.settings.game_height
+        )
+        
         self.clock = pygame.time.Clock()
 
         # Game modules
+        self.snake = Snake(self)
         self.apple = Apple(self)
         self.scoreboard = Scoreboard(self)
-        self.snake = Snake(self)
 
         # Game button
         self.play_button = PlayButton(self, 'Play')
@@ -37,9 +48,11 @@ class SnakeGame:
         self.restart_button = RestartButton(self, 'Restart')
 
         # Game parameters
+        self.game_over = False
+        self.pause = False
         self.play = True
         self.run = False
-        self.game_over = False
+        
 
     def run_game(self):
         """Main game's loop"""
@@ -50,7 +63,7 @@ class SnakeGame:
             # Check user input
             self._check_events()
 
-            if self.run:
+            if self.run and not self.pause:
                 step = delta_t / 1000
                 # Move the snake and check what the the new pos implies
                 self.snake.move(step)
@@ -116,6 +129,11 @@ class SnakeGame:
         """Responses to keys pressed"""
         if event.key == pygame.K_ESCAPE:
             self.play = False
+        elif event.key in (pygame.K_SPACE, pygame.K_p):
+            if self.pause:
+                self.pause = False
+            else:
+                self.pause = True
         if not self.snake.move_recorded:
             if event.key in (pygame.K_UP, pygame.K_w):
                 self.snake.change_direction('up')
@@ -144,9 +162,16 @@ class SnakeGame:
     def _update_screen(self):
         """Update the images on the screen and flip to the new screen"""
         # Fill the screen with background color and draw the grid
-        self.screen.fill(self.settings.back_color)
-
+        self.window.fill(self.settings.back_color)
+        
         if self.run:
+            # Draw the field
+            pygame.draw.rect(
+                self.window,
+                self.settings.game_border_color,
+                self.screen,
+                1
+            )
             # Draw the apple and the snake
             self.apple.draw_apple()
             self.snake.draw_snake()
@@ -173,7 +198,7 @@ class SnakeGame:
         # Reactivate the mouse
         pygame.mouse.set_visible(True)
 
-        # Display game Over to the screen
+        # Display 'Game Over' to the screen
         self.scoreboard.prep_game_over()
         self.exit_button.draw()
         self.restart_button.draw()

@@ -8,10 +8,21 @@ class Settings:
         """Initialize static settings for the game"""
         # Screen settings
         self.fps = 30
-        self.screen_width = 525
-        self.screen_height = 525
-        self.nb_rows = 21
-        self.case_width = self.screen_width // self.nb_rows
+
+        self.window_width = 575
+        self.window_height = 625
+
+        self.game_width = 525
+        self.game_height = 525
+        self.game_left = 25
+        self.game_top = 25
+        self.game_border_color = (200, 200, 200)
+
+        self.nb_rows_x = 23
+        self.nb_rows_y = 25
+    
+        self.case_width = self.window_width // self.nb_rows_x
+
         self.back_color = (25, 25, 25)
 
         # All element settings

@@ -13,8 +13,8 @@ class Buttons:
             msg (str): The message to display on the button
         """
         # Screen settings
-        self.screen = snake_game.screen
-        self.screen_rect = self.screen.get_rect()
+        self.window = snake_game.window
+        self.screen_rect = snake_game.screen
 
         # Size and font parameters
         self.width, self.height = 150, 50
@@ -44,10 +44,10 @@ class Buttons:
 
     def draw(self):
         """Draw the button on the screen"""
-        self.screen.fill(self.button_color, self.rect)
-        self.screen.blit(self.msg_image, self.msg_image_rect)
+        self.window.fill(self.button_color, self.rect)
+        self.window.blit(self.msg_image, self.msg_image_rect)
         pygame.draw.rect(
-            self.screen,
+            self.window,
             self.text_color,
             self.rect,
             1  # width
