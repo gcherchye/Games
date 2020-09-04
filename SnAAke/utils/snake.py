@@ -7,23 +7,27 @@ class Snake():
 
     def __init__(self, snake_game):
         """Initialize the snake and it's starting position"""
-        # Settings and screen
-        self.settings = snake_game.settings
-        self.window = snake_game.window
-        self.screen_rect = snake_game.screen
+        # The instance of the game
+        self.snake_game = snake_game
 
         # Speed and starting position
-        self.speed = self.settings.snake_speed
+        self.speed = self.snake_game.settings.snake_speed
         self.pos_incr = 0
 
-        self.pos_x_idx = self.settings.nb_rows_x // 2
-        self.pos_y_idx = self.settings.nb_rows_y // 2
+        self.pos_x_idx = self.snake_game.settings.nb_rows_x // 2
+        self.pos_y_idx = self.snake_game.settings.nb_rows_y // 2
 
-        # head variable
+        # Loading images
         self.head_up = pygame.transform.scale(
             pygame.image.load(r'utils\Images\head.png'),
-            (self.settings.element_size, self.settings.element_size)
+            (self.snake_game.settings.element_size, self.snake_game.settings.element_size)
         )
+        self.body_image = pygame.transform.scale(
+            pygame.image.load(r'utils\Images\body.png'),
+            (self.snake_game.settings.element_size, self.snake_game.settings.element_size)
+        )
+
+        # Transforming the head for other direction
         self.head_down = pygame.transform.rotate(
             self.head_up,
             180
@@ -37,17 +41,14 @@ class Snake():
             90
         )
 
+        # Retreiving rect of images and setting starting position
         self.head_rect = self.head_up.get_rect()
-        self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
-        self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
+        self.head_rect.x = self.pos_x_idx * self.snake_game.settings.case_width + 2
+        self.head_rect.y = self.pos_y_idx * self.snake_game.settings.case_width + 2
 
-        # Body variable
-        self.body_image = pygame.transform.scale(
-            pygame.image.load(r'utils\Images\body.png'),
-            (self.settings.element_size, self.settings.element_size)
-        )
         self.body_elem_rect = self.body_image.get_rect()
 
+        # Setting body variables
         self.body = []
         self.seg = []
 
@@ -59,37 +60,45 @@ class Snake():
 
     def draw_snake(self):
         """Draw the snake on the screen"""
-        self.seg = []
-
         # Draw the head
-        self.head_rect.x = self.pos_x_idx * self.settings.case_width + 2
-        self.head_rect.y = self.pos_y_idx * self.settings.case_width + 2
-
-        if self.direction in ('stop', 'up'):
-            self.window.blit(self.head_up, self.head_rect)
-        elif self.direction == 'right':
-            self.window.blit(self.head_right, self.head_rect)
-        elif self.direction == 'left':
-            self.window.blit(self.head_left, self.head_rect)
-        elif self.direction == 'down':
-            self.window.blit(self.head_down, self.head_rect)
+        self._draw_head()
 
         # Draw the rest of the body
         if len(self.body) > 0:
-            for unit in self.body:
-                segment = pygame.Rect(
-                    unit[0] * self.settings.case_width + 2,
-                    unit[1] * self.settings.case_width + 2,
-                    self.settings.element_size,
-                    self.settings.element_size
-                )
+            self._draw_body()
 
-                self.window.blit(
-                    self.body_image,
-                    segment
-                )
+    def _draw_head(self):
+        """Draw the head of the snake on the screen"""
+        self.head_rect.x = self.pos_x_idx * self.snake_game.settings.case_width + 2
+        self.head_rect.y = self.pos_y_idx * self.snake_game.settings.case_width + 2
 
-                self.seg.append(segment)
+        if self.direction in ('stop', 'up'):
+            self.snake_game.window.blit(self.head_up, self.head_rect)
+        elif self.direction == 'right':
+            self.snake_game.window.blit(self.head_right, self.head_rect)
+        elif self.direction == 'left':
+            self.snake_game.window.blit(self.head_left, self.head_rect)
+        elif self.direction == 'down':
+            self.snake_game.window.blit(self.head_down, self.head_rect)
+
+    def _draw_body(self):
+        """Draw the body on the screen"""
+        self.seg = []
+
+        for unit in self.body:
+            segment = pygame.Rect(
+                unit[0] * self.snake_game.settings.case_width + 2,
+                unit[1] * self.snake_game.settings.case_width + 2,
+                self.snake_game.settings.element_size,
+                self.snake_game.settings.element_size
+            )
+
+            self.snake_game.window.blit(
+                self.body_image,
+                segment
+            )
+
+            self.seg.append(segment)
 
     def add_unit(self):
         """Add a unit to the snake
@@ -108,13 +117,28 @@ class Snake():
             self.body.append([pos_x, pos_y])
         else:
             # Set the segment outside the screen, it will be redraw
-            # at the correct place after
+            # at the correct place after the mouvement by the if bloc
             self.body.append([1000, 1000])
 
-    def move(self, step):
-        """Trigger the flags movements"""
+    def move(self, delta_t):
+        """Move the snake and handle boundary teleportation
+
+        Args:
+            delta_t (float): the interval of time between each frame [ms]
+        """
+        self.calc_new_position(delta_t)
+        self.boundary_move()
+
+    def calc_new_position(self, delta_t):
+        """Increment the deplacement flag according to the snake speed and calc the new position
+        of the snake according to it.
+
+        Args:
+            delta_t (float): the interval of time between each frame [ms]
+        """
         self.moved = False
-        self.pos_incr += self.speed * step
+        self.pos_incr += self.speed * (delta_t / 1000)
+
         if round(self.pos_incr) != 0:
             for index in range(len(self.body) - 1, 0, -1):
                 pos_x = self.body[index - 1][0]
@@ -139,26 +163,24 @@ class Snake():
 
             self.pos_incr = 0
 
-        self.boundary_move()
-
     def boundary_move(self):
-        """Handle the mouvement outside the screen"""
+        """Handle the mouvement outside the filed"""
         if self.direction == 'up' and self.pos_y_idx < 1:
-            self.pos_y_idx = self.settings.nb_rows_y - 4
+            self.pos_y_idx = self.snake_game.settings.nb_rows_y - 4
         elif self.direction == 'down' and \
-                self.pos_y_idx > self.settings.nb_rows_y - 4:
+                self.pos_y_idx > self.snake_game.settings.nb_rows_y - 4:
             self.pos_y_idx = 1
         elif self.direction == 'left' and self.pos_x_idx < 1:
-            self.pos_x_idx = self.settings.nb_rows_x - 2
+            self.pos_x_idx = self.snake_game.settings.nb_rows_x - 2
         elif self.direction == 'right' and \
-                self.pos_x_idx > self.settings.nb_rows_x - 2:
+                self.pos_x_idx > self.snake_game.settings.nb_rows_x - 2:
             self.pos_x_idx = 1
 
     def change_direction(self, direction):
         """Change the direction to the input direction if not reverse
 
-        Arguments:
-            direction {str} -- the desired direction :
+        Args:
+            direction (str): the desired recorded based on the keyboard key pressed
                         - up / down / left / right
         """
         if self.direction != 'down' and direction == 'up':
@@ -179,20 +201,14 @@ class Snake():
                 self.collision = True
 
         return self.collision
-    
-    def increase_speed(self):
-        """Increase the speed of the speed of snake"""
-        self.speed *= 1.05
 
     def reset_snake(self):
         """Reset the snake parameter to default if game over"""
         self.body = []
-        self.pos_x_idx = self.settings.nb_rows // 2
-        self.pos_y_idx = self.settings.nb_rows // 2
+        self.pos_x_idx = self.snake_game.settings.nb_rows_x // 2
+        self.pos_y_idx = self.snake_game.settings.nb_rows_y // 2
 
         self.direction = 'stop'
         self.collision = False
         self.moved = False
         self.move_recorded = False
-
-        self.speed = self.settings.snake_speed

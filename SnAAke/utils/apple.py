@@ -36,13 +36,6 @@ class Apple:
 
         self.window.blit(self.image, self.rect)
 
-
-    def is_eaten(self, head):
-        """Check if the head of the snake collide with the apple
-        i.e.: the apple is eaten by the snake
-        """
-        return self.rect.colliderect(head)
-
     def new_pos(self, body, start=False):
         """Generate a new position for the apple if this new position
         is not already occupied by the snake.

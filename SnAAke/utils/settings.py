@@ -20,7 +20,7 @@ class Settings:
 
         self.nb_rows_x = 23
         self.nb_rows_y = 25
-    
+
         self.case_width = self.window_width // self.nb_rows_x
 
         self.back_color = (25, 25, 25)
@@ -31,6 +31,7 @@ class Settings:
         # Snake settings
         self.snake_color = (0, 204, 0)
         self.snake_speed = 1
+        self.snake_speed_incr = 1.05
 
         # Scoring settings
         self.score_color = (200, 200, 200)
