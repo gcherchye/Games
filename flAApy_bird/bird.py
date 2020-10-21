@@ -1,4 +1,4 @@
-"""flAApy bird game with NEAT"""
+"""Some bird tha will be NEATly flAApy"""
 from __future__ import absolute_import
 
 import pygame

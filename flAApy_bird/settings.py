@@ -28,3 +28,7 @@ class Settings:
             load_image('Images', 'bird2', 'png'),
             load_image('Images', 'bird3', 'png')
         ]
+
+        # Pipe settings
+        self.gap = 200
+        self.pipe_vel = 5
