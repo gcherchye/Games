@@ -12,6 +12,7 @@
 !*.py
 !*.bmp
 !*.png
+!*.txt
 
 # Forget
 nocommit*
