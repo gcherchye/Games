@@ -13,6 +13,9 @@ class Sudoku:
         # Game settings
         self.settings = Settings()
 
+        # Pygame initializing
+        pygame.init()
+
         # Game window
         self.window = pygame.display.set_mode(
             (self.settings.window_width, self.settings.window_height)
@@ -26,6 +29,24 @@ class Sudoku:
             self.settings.game_width,
             self.settings.game_height
         )
+
+        # Setting the clock
+        self.clock = pygame.time.Clock()
+
+        # Game modules
+
+        # Game buttons
+
+        # Game flags
+        self.game_over = False
+        self.pause = False
+        self.play = True
+        self.run = False
+
+    def run_game(self):
+        while self.play:
+            # Tick the clock
+            delta_t = self.clock.tick(self.settings.fps)
 
 if __name__ == '__main__':
     sudoku = Sudoku()

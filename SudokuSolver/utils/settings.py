@@ -5,8 +5,10 @@ from __future__ import absolute_import
 class Settings():
     """Settings for the sudoku game"""
 
-    def init(self):
+    def __init__(self):
         """initialize settings for the sudoku game"""
+        self.fps = 30
+
         self.window_width = 42
         self.window_height = 42
 
