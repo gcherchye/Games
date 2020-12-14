@@ -1,4 +1,6 @@
 """The AlienInvasion class - main file"""
+from __future__ import absolute_import
+
 import sys
 from time import sleep
 
@@ -79,7 +81,7 @@ class AlienInvasion:
     def _start_game(self):
         """Start the game"""
         # Reset the dynamic settings
-        self.settings.initiate_dynamic_settings()
+        self.settings.init_dynamic()
 
         # Hide the mouse cursor
         pygame.mouse.set_visible(False)
@@ -252,7 +254,7 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        self.screen.fill(self.settings.bg_color)
+        self.screen.fill(self.settings.background_color)
         self.ship.blitme()
 
         for bullet in self.bullets.sprites():

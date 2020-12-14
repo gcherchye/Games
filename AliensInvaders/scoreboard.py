@@ -34,7 +34,7 @@ class Scoreboard:
             score_str,
             True,
             self.text_color,
-            self.settings.bg_color
+            self.settings.background_color
         )
 
         # Display the score at the top right of the screen
@@ -50,7 +50,7 @@ class Scoreboard:
             self.high_score_str,
             True,
             self.text_color,
-            self.settings.bg_color
+            self.settings.background_color
         )
 
         # Center the high score at the top center of the screen
