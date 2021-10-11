@@ -5,10 +5,11 @@ import math
 import time
 
 import pygame
+from car import PlayerCar
 
 from utils import (
     draw,
-    scale_surf
+    scale_img
 )
 
 
@@ -20,8 +21,7 @@ GRASS = pygame.transform.scale(
 )
 TRACK_BORDER = pygame.image.load('img/track-border.png')
 FINISH = pygame.image.load('img/finish.png')
-RED_CAR = scale_surf(pygame.image.load('img/red-car.png'), 0.55)
-GREEN_CAR = scale_surf(pygame.image.load('img/green-car.png'), 0.55)
+RED_CAR = scale_img(pygame.image.load('img/red-car.png'), 0.55)
 
 images = [
     (GRASS, (0, 0)),
@@ -37,16 +37,23 @@ FPS = 60
 # Main loop
 RUN = True
 clock = pygame.time.Clock()
+player_car = PlayerCar(4, 4)
 
 while RUN:
     clock.tick(FPS)
 
-    draw(WIN, images)
+    draw(WIN, images, player_car)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUN = False
 
-    pygame.display.update()
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_q]:
+        player_car.rotate(left=True)
+    if keys[pygame.K_d]:
+        player_car.rotate(right=True)
+
 
 pygame.quit()
