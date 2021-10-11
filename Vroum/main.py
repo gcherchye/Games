@@ -54,6 +54,8 @@ while RUN:
         player_car.rotate(left=True)
     if keys[pygame.K_d]:
         player_car.rotate(right=True)
+    if keys[pygame.K_z]:
+        player_car.move_forward()
 
 
 pygame.quit()

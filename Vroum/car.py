@@ -18,14 +18,14 @@ class AbstractCar:
     """
 
     def __init__(self, max_vel: int, rotation_vel: int) -> None:
-        self.img = self.IMG
-
         self.max_vel = max_vel
         self.vel = 0
+        self.acceleration = 0.1
 
         self.rotation_vel = rotation_vel
         self.angle = 0
 
+        self.img = self.IMG
         self.x, self.y = self.START_POS
 
     def rotate(self, left: bool=False, right: bool=False) -> None:
@@ -40,6 +40,13 @@ class AbstractCar:
 
         if right:
             self.angle -= self.rotation_vel
+
+    def move_forward(self):
+        self.vel = min(self.vel + self.acceleration, self.max_vel)
+        self.move()
+    
+    def move(self):
+        self.x += self.vel
 
     def draw(self, surface: pygame.surface) -> None:
         """Draw the car on the screen
