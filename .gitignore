@@ -12,9 +12,9 @@
 !*.py
 !*.bmp
 !*.png
+!*.jpg
 !*.txt
 
 # Forget
 nocommit*
-venv*
 test.py
