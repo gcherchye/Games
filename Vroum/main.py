@@ -1,12 +1,9 @@
 """Main script of the game"""
 from __future__ import absolute_import
 
-import math
-import time
-
 import pygame
-from car import PlayerCar
 
+from car import PlayerCar
 from utils import (
     draw,
     scale_img

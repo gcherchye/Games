@@ -1,6 +1,8 @@
 """Cars defintion"""
 from __future__ import absolute_import
 
+import math
+
 import pygame
 
 from utils import (
@@ -44,9 +46,14 @@ class AbstractCar:
     def move_forward(self):
         self.vel = min(self.vel + self.acceleration, self.max_vel)
         self.move()
-    
+
     def move(self):
-        self.x += self.vel
+        radians = math.radians(self.angle)
+        vertical = math.cos(radians) * self.vel
+        horizontal = math.sin(radians) * self.vel
+
+        self.y -= vertical
+        self.x -= horizontal
 
     def draw(self, surface: pygame.surface) -> None:
         """Draw the car on the screen
