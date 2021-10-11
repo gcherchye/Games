@@ -6,14 +6,27 @@ import time
 
 import pygame
 
+from utils import (
+    draw,
+    scale_surf
+)
+
 
 # Load images
-GRASS = pygame.image.load('img/grass.jpg')
 TRACK = pygame.image.load('img/track.png')
+GRASS = pygame.transform.scale(
+    pygame.image.load('img/grass.jpg'),
+    (TRACK.get_width(), TRACK.get_height())
+)
 TRACK_BORDER = pygame.image.load('img/track-border.png')
 FINISH = pygame.image.load('img/finish.png')
-RED_CAR = pygame.image.load('img/red-car.png')
-GREEN_CAR = pygame.image.load('img/green-car.png')
+RED_CAR = scale_surf(pygame.image.load('img/red-car.png'), 0.55)
+GREEN_CAR = scale_surf(pygame.image.load('img/green-car.png'), 0.55)
+
+images = [
+    (GRASS, (0, 0)),
+    (TRACK, (0, 0))
+]
 
 # Pygame settings
 WIN = pygame.display.set_mode((TRACK.get_width(), TRACK.get_height()))
@@ -22,14 +35,18 @@ pygame.display.set_caption('Vroum Vroum !!')
 FPS = 60
 
 # Main loop
-run = True
+RUN = True
 clock = pygame.time.Clock()
 
-while run:
+while RUN:
     clock.tick(FPS)
+
+    draw(WIN, images)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            RUN = False
+
+    pygame.display.update()
 
 pygame.quit()
