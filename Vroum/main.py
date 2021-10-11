@@ -19,10 +19,15 @@ GREEN_CAR = pygame.image.load('img/green-car.png')
 WIN = pygame.display.set_mode((TRACK.get_width(), TRACK.get_height()))
 pygame.display.set_caption('Vroum Vroum !!')
 
+FPS = 60
+
 # Main loop
 run = True
+clock = pygame.time.Clock()
 
 while run:
+    clock.tick(FPS)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
