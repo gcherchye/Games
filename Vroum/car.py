@@ -43,17 +43,21 @@ class AbstractCar:
         if right:
             self.angle -= self.rotation_vel
 
-    def move_forward(self):
-        self.vel = min(self.vel + self.acceleration, self.max_vel)
-        self.move()
-
     def move(self):
         radians = math.radians(self.angle)
         vertical = math.cos(radians) * self.vel
         horizontal = math.sin(radians) * self.vel
-
+        
         self.y -= vertical
         self.x -= horizontal
+
+    def move_forward(self):
+        self.vel = min(self.vel + self.acceleration, self.max_vel)
+        self.move()
+
+    def reduce_speed(self):
+        self.vel = max(self.vel - self.acceleration / 2, 0)
+        self.move()
 
     def draw(self, surface: pygame.surface) -> None:
         """Draw the car on the screen
